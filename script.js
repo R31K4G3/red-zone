@@ -19,8 +19,10 @@ gainNode.connect(audioContext.destination);
 const controlsSpan = document.createElement("span");
 controlsSpan.style.userSelect = "none";
 controlsSpan.style.background = "#222";
-controlsSpan.style.display = "inline-block";
-controlsSpan.style.padding = "7px";
+controlsSpan.style.display = "flex";
+controlsSpan.style.padding = "7px 14px 7px 3px";
+controlsSpan.style.alignItems = "center";
+controlsSpan.style.width = "fit-content";
 
 const playingControl = document.createElement("input");
 playingControl.type = "checkbox";
@@ -33,6 +35,10 @@ const playingDisplaylabel = document.createElement("label");
 playingDisplaylabel.htmlFor = "playing-control";
 const playingDisplay = document.createElement("img");
 playingDisplay.src = "./play.svg";
+playingDisplay.style.verticalAlign = "middle";
+playingDisplay.style.width = "28px";
+playingDisplay.style.height = "28px";
+playingDisplay.style.padding = "0px 8px 0px 0px";
 playingDisplaylabel.appendChild(playingDisplay);
 controlsSpan.appendChild(playingDisplaylabel);
 
@@ -42,9 +48,14 @@ currentTimeControl.min = "0";
 currentTimeControl.max = "1024";
 controlsSpan.appendChild(currentTimeControl);
 
+const paddingSpace = document.createElement("span");
+paddingSpace.style.width = "8px";
+controlsSpan.appendChild(paddingSpace);
+
 const currentTimeDisplay = document.createElement("span");
 currentTimeDisplay.textContent = "00:00 / 00:00";
-currentTimeDisplay.style.fontSize = "smaller";
+currentTimeDisplay.style.fontSize = "small";
+currentTimeDisplay.style.padding = "0px 8px 0px 0px";
 const updateCurrentTimeDisplay = () => {
     let t = Math.round(audioElement.currentTime);
     let currentTime = `${t % 60}`.padStart(2, "0");
@@ -75,6 +86,10 @@ const muteDisplaylabel = document.createElement("label");
 muteDisplaylabel.htmlFor = "mute-control";
 const muteDisplay = document.createElement("img");
 muteDisplay.src = "./unmuted.svg";
+muteDisplay.style.verticalAlign = "middle";
+muteDisplay.style.padding = "0px 7px 0px 0px";
+muteDisplay.style.width = "20px";
+muteDisplay.style.height = "20px";
 muteDisplaylabel.appendChild(muteDisplay);
 controlsSpan.appendChild(muteDisplaylabel);
 
