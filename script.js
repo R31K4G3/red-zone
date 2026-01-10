@@ -23,6 +23,7 @@ controlsSpan.style.display = "flex";
 controlsSpan.style.padding = "7px 14px 7px 3px";
 controlsSpan.style.alignItems = "center";
 controlsSpan.style.width = "fit-content";
+controlsSpan.style.fontFamily = "sans-serif";
 
 const playingControl = document.createElement("input");
 playingControl.type = "checkbox";
