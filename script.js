@@ -143,5 +143,15 @@ muteControl.addEventListener("input", () => {
     }
 });
 volumeControl.addEventListener("input", () => {
-    gainNode.gain.value = volumeControl.value / volumeControl.max;
+    if (+volumeControl.value) {
+        audioElement.muted = false;
+        muteControl.checked = false;
+        muteDisplay.src = unmutedSvg;
+        gainNode.gain.value = volumeControl.value / volumeControl.max;
+    } else {
+        audioElement.muted = true;
+        muteControl.checked = true;
+        muteDisplay.src = mutedSvg;
+        gainNode.gain.value = 0.5;
+    }
 });
