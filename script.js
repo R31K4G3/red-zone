@@ -1,3 +1,8 @@
+const pauseSvg = `data:image/svg+xml;base64,${btoa('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>')}`;
+const playSvg = `data:image/svg+xml;base64,${btoa('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M8 5v14l11-7z" /></svg>')}`;
+const mutedSvg = `data:image/svg+xml;base64,${btoa('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#FFFFFF"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 9.75 19.5 12m0 0 2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6 4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg>')}`;
+const unmutedSvg = `data:image/svg+xml;base64,${btoa('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#FFFFFF"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg>')}`;
+
 const audioElement = document.createElement("audio");
 audioElement.src = "./audio.mp3";
 audioElement.loop = true;
@@ -35,7 +40,7 @@ controlsSpan.appendChild(playingControl);
 const playingDisplaylabel = document.createElement("label");
 playingDisplaylabel.htmlFor = "playing-control";
 const playingDisplay = document.createElement("img");
-playingDisplay.src = "./play.svg";
+playingDisplay.src = playSvg;
 playingDisplay.style.verticalAlign = "middle";
 playingDisplay.style.width = "28px";
 playingDisplay.style.height = "28px";
@@ -86,7 +91,7 @@ controlsSpan.appendChild(muteControl);
 const muteDisplaylabel = document.createElement("label");
 muteDisplaylabel.htmlFor = "mute-control";
 const muteDisplay = document.createElement("img");
-muteDisplay.src = "./unmuted.svg";
+muteDisplay.src = unmutedSvg;
 muteDisplay.style.verticalAlign = "middle";
 muteDisplay.style.padding = "0px 7px 0px 0px";
 muteDisplay.style.width = "20px";
@@ -120,7 +125,7 @@ audioElement.addEventListener("pause", () => {
     }
 });
 playingControl.addEventListener("input", () => {
-    playingDisplay.src = playingControl.checked ? "./pause.svg" : "./play.svg";
+    playingDisplay.src = playingControl.checked ? pauseSvg : playSvg;
     audioElement[playingControl.checked ? "play" : "pause"]();
     audioContext.resume();
 });
@@ -129,8 +134,8 @@ currentTimeControl.addEventListener("input", () => {
     updateCurrentTimeDisplay();
 });
 muteControl.addEventListener("input", () => {
+    muteDisplay.src = muteControl.checked ? mutedSvg : unmutedSvg;
     audioElement.muted = muteControl.checked;
-    muteDisplay.src = muteControl.checked ? "./muted.svg" : "./unmuted.svg";
     if (audioElement.muted) {
         volumeControl.value = "0";
     } else {
