@@ -20,11 +20,31 @@ window.addEventListener("visibilitychange", () => {
         audioContext.resume();
     }
 });
-const source = audioContext.createMediaElementSource(audioElement);
-const gainNode = audioContext.createGain();
-gainNode.gain.value = 1;
-source.connect(gainNode);
-gainNode.connect(audioContext.destination);
+const { setGainValue, getGainValue, setMute, } = (() => {
+    const source = audioContext.createMediaElementSource(audioElement);
+    const gainNode = audioContext.createGain();
+    let gainValue = 1;
+    gainNode.gain.value = 1;
+    source.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+
+    return {
+        setGainValue(value) {
+            value = +value;
+            if (value !== value) return;
+            if (value < 0) value = 0;
+            else if (value > 1) value = 1;
+            gainNode.gain.value = value;
+            gainValue = value === 0 ? 0.5 : value;
+        },
+        getGainValue() {
+            return gainValue;
+        },
+        setMute(muted) {
+            gainNode.gain.value = muted ? 0 : gainValue;
+        },
+    };
+})();
 
 const controlsSpan = document.createElement("span");
 controlsSpan.style.userSelect = "none";
@@ -140,23 +160,17 @@ currentTimeControl.addEventListener("input", () => {
 });
 muteControl.addEventListener("input", () => {
     muteDisplay.src = muteControl.checked ? mutedSvg : unmutedSvg;
-    audioElement.muted = muteControl.checked;
-    if (audioElement.muted) {
-        volumeControl.value = "0";
-    } else {
-        volumeControl.value = Math.round(gainNode.gain.value * volumeControl.max);
-    }
+    volumeControl.value = muteControl.checked ? "0" : Math.round(getGainValue() * volumeControl.max);
+    setMute(muteControl.checked);
 });
 volumeControl.addEventListener("input", () => {
-    if (+volumeControl.value) {
-        audioElement.muted = false;
+    const volumeValue = +volumeControl.value;
+    if (volumeValue !== 0) {
         muteControl.checked = false;
         muteDisplay.src = unmutedSvg;
-        gainNode.gain.value = volumeControl.value / volumeControl.max;
     } else {
-        audioElement.muted = true;
         muteControl.checked = true;
         muteDisplay.src = mutedSvg;
-        gainNode.gain.value = 0.5;
     }
+    setGainValue(volumeValue / volumeControl.max);
 });
