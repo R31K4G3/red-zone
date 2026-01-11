@@ -15,6 +15,11 @@ audioElement.addEventListener("loadedmetadata", () => {
 document.body.appendChild(audioElement);
 
 const audioContext = new AudioContext();
+window.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") {
+        audioContext.resume();
+    }
+});
 const source = audioContext.createMediaElementSource(audioElement);
 const gainNode = audioContext.createGain();
 gainNode.gain.value = 1;
